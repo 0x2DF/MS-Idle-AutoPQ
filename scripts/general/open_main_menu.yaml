@@ -1,0 +1,5 @@
+name: "Open Main Menu"
+
+steps:
+  - name: "open_menu"
+    find: "assets/screens/Hunting/menu_edit.png"

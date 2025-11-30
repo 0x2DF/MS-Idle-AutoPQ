@@ -1,0 +1,22 @@
+name: "Normal KPQ Leecher"
+
+steps:
+  - loop:
+      iterations: "infinite"
+      steps:
+        - name: "accept_party_quest"
+          find: "assets/screens/Party_Quest/Matching_Complete/accept.png"
+          start_delay: 3
+          retry_delay: 3
+          retries: 300
+          verify_state_change: true
+          verify_delay: 2
+          verify_retries: 5
+          # 3 * 300 / 60 = 15 minutes max queue time
+
+        - name: "leave_party_quest"
+          find: "assets/screens/Party_Quest/Clear/leave.png"
+          start_delay: 20
+          retry_delay: 3
+          retries: 100
+          # 3 * 100 / 60 = 1+5 minutes max pq time

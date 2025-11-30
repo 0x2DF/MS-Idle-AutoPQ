@@ -1,0 +1,9 @@
+# Application Configuration
+
+# Window capture settings
+# Leave window_name empty or null to capture full screen
+# Specify a window name/title to limit capture to that window
+window_name: "BlueStacks"
+
+# Alternative: null or empty for full screen capture
+# window_name: null
