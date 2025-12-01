@@ -31,6 +31,7 @@ class ClickAction(ActionStrategy):
     
     def execute(self, position: Position, offset: Position = None):
         x, y = self._calculate_final_position(position, offset)
+        print(f"[DEBUG] Click at coordinates: ({x}, {y})")
         pyautogui.click(x, y)
 
 
@@ -39,6 +40,7 @@ class DoubleClickAction(ActionStrategy):
     
     def execute(self, position: Position, offset: Position = None):
         x, y = self._calculate_final_position(position, offset)
+        print(f"[DEBUG] Double-click at coordinates: ({x}, {y})")
         pyautogui.doubleClick(x, y)
 
 
@@ -47,6 +49,7 @@ class MoveAction(ActionStrategy):
     
     def execute(self, position: Position, offset: Position = None):
         x, y = self._calculate_final_position(position, offset)
+        print(f"[DEBUG] Move to coordinates: ({x}, {y})")
         pyautogui.moveTo(x, y)
 
 
@@ -55,6 +58,7 @@ class RightClickAction(ActionStrategy):
     
     def execute(self, position: Position, offset: Position = None):
         x, y = self._calculate_final_position(position, offset)
+        print(f"[DEBUG] Right-click at coordinates: ({x}, {y})")
         pyautogui.rightClick(x, y)
 
 

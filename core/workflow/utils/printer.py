@@ -1,4 +1,5 @@
 # printer.py
+from core.utils import get_logger
 
 
 class WorkflowPrinter:
@@ -12,6 +13,7 @@ class WorkflowPrinter:
             loop_states: Dict mapping loop_id to loop metadata
         """
         self.loop_states = loop_states
+        self.logger = get_logger()
     
     def print_step_info(self, step, loop_id, current_index, total_steps):
         """
@@ -38,12 +40,12 @@ class WorkflowPrinter:
         # Print loop iteration header at start of loop
         if current_index == loop_state['start']:
             if loop.is_infinite:
-                print(f"[Workflow] Loop iteration {loop_state['iteration'] + 1} (infinite)")
+                self.logger.info(f"🔁 Loop iteration {loop_state['iteration'] + 1} (infinite)")
             else:
-                print(f"[Workflow] Loop iteration {loop_state['iteration'] + 1}/{loop.iterations}")
+                self.logger.info(f"🔁 Loop iteration {loop_state['iteration'] + 1}/{loop.iterations}")
         
-        print(f"  [Loop Step {step_num}/{total_steps}] {step.name}")
+        self.logger.info(f"  [{step_num}/{total_steps}] {step.name}")
     
     def _print_regular_step_info(self, step, current_index, total_steps):
         """Print information for a regular (non-loop) step."""
-        print(f"[Workflow] Step {current_index + 1}/{total_steps}: {step.name}")
+        self.logger.info(f"[{current_index + 1}/{total_steps}] {step.name}")

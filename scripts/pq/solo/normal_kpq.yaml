@@ -3,23 +3,23 @@ name: "Normal KPQ Run"
 steps:
   - include: "../../general/open_main_menu.yaml"
 
-  - name: "open_party_quest"
-    find: "assets/screens/Main_Menu/party_quest.png"
+  - name: "Open Party Quest"
+    find: "assets/screens/Main_Menu/party_quest_adb.png"
 
-  - name: "open_kpq_menu"
-    find: "assets/screens/Party_Quest/kpq.png"
+  - name: "Open KPQ Menu"
+    find: "assets/screens/Party_Quest/kpq_adb.png"
 
   - loop:
       iterations: "infinite"
       steps:
-        - name: "queue_kpq"
-          find: "assets/screens/KPQ/auto_match.png"
+        - name: "Queue KPQ"
+          find: "assets/screens/KPQ/auto_match_adb.png"
           verify_state_change: true
           verify_delay: 2
           verify_retries: 3
 
-        - name: "accept_party_quest"
-          find: "assets/screens/Party_Quest/Matching_Complete/accept.png"
+        - name: "Accept Party Quest"
+          find: "assets/screens/Party_Quest/Matching_Complete/accept_adb.png"
           start_delay: 5
           retry_delay: 3
           retries: 300
@@ -28,8 +28,8 @@ steps:
           verify_retries: 5
           # 3 * 300 / 60 = 15 minutes max queue time
 
-        - name: "leave_party_quest"
-          find: "assets/screens/Party_Quest/Clear/leave.png"
+        - name: "Leave Party Quest"
+          find: "assets/screens/Party_Quest/Clear/leave_adb.png"
           start_delay: 60
           retry_delay: 3
           retries: 100

@@ -1,4 +1,5 @@
 # step_executor.py
+from core.utils import get_logger
 
 
 class StepExecutor:
@@ -6,6 +7,7 @@ class StepExecutor:
     
     def __init__(self, context):
         self.context = context
+        self.logger = get_logger()
     
     def execute(self, step):
         """
@@ -14,7 +16,6 @@ class StepExecutor:
         """
         # Apply start delay
         if step.start_delay > 0:
-            print(f"  → Start delay: {step.start_delay}s")
             if not self.context.sleep(step.start_delay):
                 return False
         
@@ -23,8 +24,16 @@ class StepExecutor:
             if self.context.is_stopped():
                 return False
             
+            # Show retry attempt if not first try
+            if attempt > 0:
+                self.logger.info(f"  → Retry {attempt}/{step.retries - 1}")
+            
             if self._try_execute_once(step):
                 return True
+            
+            # Check if stopped after failed attempt
+            if self.context.is_stopped():
+                return False
             
             # Wait before next retry
             if attempt < step.retries - 1:
@@ -53,7 +62,6 @@ class StepExecutor:
             if self.context.verify_template_absent(step):
                 return True
             else:
-                print(f"  → State unchanged after action, retrying...")
                 return False
         
         return True

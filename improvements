@@ -1,1 +1,36 @@
+state machine
+when script start go to start point
+click without being in the screen
 
+logging stats per run
+
+
+detect current screen/state
+if in valid state -> perform action
+if in unknown state -> recover
+after action -> wait for only the known resulting state
+verify expected next state
+if mismatch -> handle
+
+
+Check wrong states during wait
+
+State = {
+name: "login_screen"
+validate: True/False
+action(): click login
+transitions: {
+ success: "home_screen"
+ error: "error_screen"
+}
+}
+
+curr = detect_curr_state()
+while curr != "end":
+ state = state[curr]
+ if not state.validate():
+  curr = recover()
+  continue
+ state.action()
+ next.wait_for_any([state.success, state.error])
+ curr = next

@@ -157,3 +157,7 @@ class ScreenCapture:
         monitor = self.strategy.get_monitor_region(roi)
         img = np.array(self._get_mss().grab(monitor))
         return img[:, :, :3]  # drop alpha channel
+    
+    def get_offset(self) -> Position:
+        """Get the coordinate offset from the capture strategy."""
+        return self.strategy.get_offset()

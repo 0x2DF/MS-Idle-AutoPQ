@@ -1,5 +1,6 @@
 # Vision module - screen capture and image matching
 from .capture import ScreenCapture, CaptureStrategy, FullScreenCaptureStrategy, WindowCaptureStrategy
+from .adb_capture_strategy import ADBCaptureStrategy, ADBScreenCapture
 from .matcher import ImageMatcher
 
 __all__ = [
@@ -7,5 +8,7 @@ __all__ = [
     'CaptureStrategy',
     'FullScreenCaptureStrategy',
     'WindowCaptureStrategy',
+    'ADBCaptureStrategy',
+    'ADBScreenCapture',
     'ImageMatcher'
 ]

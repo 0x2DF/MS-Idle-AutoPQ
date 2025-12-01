@@ -2,6 +2,7 @@
 from core.vision import ScreenCapture, ImageMatcher
 from core.input import ActionExecutor
 from core.utils.debug import DebugManager
+from core.utils import get_logger
 from core.constants import MAX_RECOVERY_ATTEMPTS
 from ..models import Loop
 from .execution_context import ExecutionContext
@@ -49,9 +50,10 @@ class WorkflowEngine:
         self.flattened_steps = []
         self.loop_state_manager = None
         self.printer = None
+        self.logger = get_logger()
 
     def run(self, stop_event=None):
-        print(f"[Workflow] Starting with {len(self.steps)} items")
+        self.logger.debug(f"Starting workflow with {len(self.steps)} items")
         
         # Initialize execution context
         self.context = ExecutionContext(self._capture, self._matcher, self._actions, self._debug, stop_event)
@@ -72,7 +74,7 @@ class WorkflowEngine:
         current_index = 0
         while current_index < len(self.flattened_steps):
             if self.context.is_stopped():
-                print("[Workflow] Stop requested")
+                self.logger.info("■ Workflow stopped")
                 return
             
             step_info = self.flattened_steps[current_index]
@@ -93,17 +95,22 @@ class WorkflowEngine:
                 if current_index is None:
                     return
             else:
+                # Check if stopped before attempting recovery
+                if self.context.is_stopped():
+                    self.logger.info("■ Workflow stopped")
+                    return
+                
                 # Attempt recovery
-                print(f"  ✗ Step '{step.name}' failed after {step.retries} retries")
+                self.logger.info(f"  ✗ Failed after {step.retries} attempts")
                 recovered_index = state_recovery.attempt_recovery()
                 
                 if recovered_index is not None:
                     recovered_step = self.flattened_steps[recovered_index]['step']
-                    print(f"  → Recovered to step {recovered_index + 1}: {recovered_step.name}")
+                    self.logger.info(f"  → Recovered to step {recovered_index + 1}: {recovered_step.name}")
                     current_index = recovered_index
                 else:
-                    print(f"[Workflow] Could not determine current state. Exiting.")
+                    self.logger.error("Could not determine current state. Exiting.")
                     return
         
-        print("[Workflow] Complete")
+        self.logger.info("✓ Workflow complete")
 

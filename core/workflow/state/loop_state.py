@@ -1,4 +1,5 @@
 # loop_state.py
+from core.utils import get_logger
 
 
 class LoopStateManager:
@@ -14,6 +15,7 @@ class LoopStateManager:
         """
         self.loop_states = loop_states
         self.context = context
+        self.logger = get_logger()
     
     def get_next_index(self, current_index, loop_id, flattened_steps_count):
         """
@@ -35,7 +37,7 @@ class LoopStateManager:
         
         # Check break condition before continuing
         if self._should_break_loop(loop):
-            print(f"  → Break condition met")
+            self.logger.info(f"  ⏹ Break condition met")
             return loop_state['end'] + 1
         
         # If not at end of loop, continue to next step
@@ -56,7 +58,7 @@ class LoopStateManager:
         
         # Check break condition after delay
         if self._should_break_loop(loop):
-            print(f"  → Break condition met")
+            self.logger.info(f"  ⏹ Break condition met")
             return loop_state['end'] + 1
         
         # Loop back to start

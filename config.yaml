@@ -1,5 +1,20 @@
 # Application Configuration
 
+# Input method: "pyautogui", "win32", or "adb"
+# - pyautogui: Controls your physical mouse (simple, works everywhere, zero setup)
+# - win32: Sends clicks to window without moving cursor (may not work with all apps)
+# - adb: Sends commands to Android device (requires enabling ADB in BlueStacks)
+input_method: "adb"
+
+# PyAutoGUI settings
+pyautogui_duration: 0.0  # Movement duration (0 = instant, 0.2 = smooth)
+pyautogui_restore_cursor: true  # Restore cursor position after click
+
+# ADB device ID (optional)
+# Leave empty to use first available device
+# Find device ID with: adb devices
+adb_device_id: "localhost:5555"
+
 # Window capture settings
 # Leave window_name empty or null to capture full screen
 # Specify a window name/title to limit capture to that window
@@ -7,3 +22,8 @@ window_name: "BlueStacks"
 
 # Alternative: null or empty for full screen capture
 # window_name: null
+
+# Multi-scale template matching
+# Scale factors to try when matching templates (handles window resizing)
+# Default: [0.5, 0.75, 1.0, 1.25, 1.5]
+scale_range: [0.5, 0.75, 1.0, 1.25, 1.5]

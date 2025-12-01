@@ -2,6 +2,7 @@
 import threading
 import time
 from core.constants import LOOP_ITERATION_DELAY
+from core.utils import get_logger
 
 
 class ExecutionController:
@@ -12,6 +13,7 @@ class ExecutionController:
         self.stop_event = threading.Event()
         self.execution_thread = None
         self.is_running = False
+        self.logger = get_logger()
     
     def start(self, mode="once"):
         """
@@ -19,7 +21,7 @@ class ExecutionController:
         mode: "once" or "loop"
         """
         if self.is_running:
-            print("[Controller] Workflow is already running")
+            self.logger.info("⚠ Workflow is already running")
             return
         
         self.stop_event.clear()
@@ -38,7 +40,7 @@ class ExecutionController:
         if not self.is_running:
             return
         
-        print("\n[Controller] Stop signal received, stopping workflow...")
+        self.logger.info("\n⏹ Stopping workflow...")
         self.stop_event.set()
     
     def wait(self):
@@ -51,17 +53,17 @@ class ExecutionController:
         try:
             self.engine.run(self.stop_event)
         except Exception as e:
-            print(f"[Controller] Error during execution: {e}")
+            self.logger.error(f"Error during execution: {e}")
         finally:
             self.is_running = False
-            print("[Controller] Execution complete")
+            self.logger.debug("Execution complete")
     
     def _run_loop(self):
         """Execute workflow in a loop until stopped."""
         iteration = 1
         try:
             while not self.stop_event.is_set():
-                print(f"\n[Controller] Starting iteration {iteration}")
+                self.logger.info(f"\n🔄 Starting iteration {iteration}")
                 
                 if hasattr(self.engine, 'context') and self.engine.context:
                     self.engine.context.recovery_attempts = 0
@@ -71,12 +73,12 @@ class ExecutionController:
                 if self.stop_event.is_set():
                     break
                 
-                print(f"[Controller] Iteration {iteration} complete")
+                self.logger.info(f"✓ Iteration {iteration} complete")
                 iteration += 1
                 
                 time.sleep(LOOP_ITERATION_DELAY)
         except Exception as e:
-            print(f"[Controller] Error during execution: {e}")
+            self.logger.error(f"Error during execution: {e}")
         finally:
             self.is_running = False
-            print("[Controller] Loop execution stopped")
+            self.logger.info("■ Loop execution stopped")

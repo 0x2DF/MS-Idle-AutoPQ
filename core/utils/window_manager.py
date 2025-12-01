@@ -60,11 +60,14 @@ class WindowsWindowManager(WindowManager):
             if self.win32gui.IsIconic(hwnd):
                 self.win32gui.ShowWindow(hwnd, 9)  # SW_RESTORE
             
-            # Bring to foreground
+            # Try to bring to foreground
+            # This may fail due to Windows security restrictions, but that's okay
+            # PostMessage will still work even if window isn't in foreground
             self.win32gui.SetForegroundWindow(hwnd)
             return True
-        except Exception as e:
-            print(f"[WindowManager] Error bringing window to foreground: {e}")
+        except Exception:
+            # Silently fail - this is expected behavior on Windows
+            # The window doesn't need to be in foreground for PostMessage to work
             return False
     
     def _find_window(self, window_name):
