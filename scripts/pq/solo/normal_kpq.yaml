@@ -20,17 +20,18 @@ steps:
 
         - name: "Accept Party Quest"
           find: "assets/screens/Party_Quest/Matching_Complete/accept_adb.png"
-          start_delay: 5
           retry_delay: 3
           retries: 300
+          # 3 * 300 / 60 = 15 minutes max queue time
           verify_state_change: true
           verify_delay: 2
           verify_retries: 5
-          # 3 * 300 / 60 = 15 minutes max queue time
 
         - name: "Leave Party Quest"
           find: "assets/screens/Party_Quest/Clear/leave_adb.png"
-          start_delay: 60
-          retry_delay: 3
+          retry_delay: 6
           retries: 100
-          # 3 * 100 / 60 = 1+5 minutes max pq time
+          # 6 * 100 / 60 = 10 minutes max pq time
+          verify_state_change: true
+          verify_delay: 2
+          verify_retries: 5
